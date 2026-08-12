@@ -36,7 +36,7 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
     }
 
-    public UserEntity updateUser(Long id, UserEntity user) {
+    public UserEntity updateUser(UserEntity user, Long id) {
         return userRepository.updateById(id, user)
                 .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
     }
