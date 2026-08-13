@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>WebSocket Test</title>
+</head>
+<body>
+
+<h1>Location WebSocket Test</h1>
+
+<pre id="result"></pre>
+
+<script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7/bundles/stomp.umd.min.js"></script>
+
+<script>
+    const result = document.getElementById("result");
+
+    const client = new StompJs.Client({
+        brokerURL: "wss://api.spidermantracker.kr/ws",
+
+        onConnect: () => {
+            console.log("WebSocket Connected");
+
+            result.textContent += "CONNECTED\n";
+
+            client.subscribe("/topic/location", (message) => {
+                const data = JSON.parse(message.body);
+
+                console.log(data);
+
+                result.textContent +=
+                    JSON.stringify(data, null, 2) + "\n";
+            });
+        },
+
+        onStompError: (frame) => {
+            console.error(frame);
+        }
+    });
+
+    client.activate();
+</script>
+
+</body>
+</html>
