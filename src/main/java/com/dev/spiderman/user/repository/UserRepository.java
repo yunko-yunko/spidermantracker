@@ -92,4 +92,12 @@ public class UserRepository {
 
         nextTracker.setCurrentTracker(true);
     }
+
+    @Transactional
+    public void toggleTrackingCandidate(Long userId) {
+        UserJpaEntity currentUser = userJpaRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
+
+        currentUser.setTrackingCandidate(!currentUser.isTrackingCandidate());
+    }
 }

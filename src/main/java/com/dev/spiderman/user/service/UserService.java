@@ -67,4 +67,12 @@ public class UserService {
 
         return nextTracker;
     }
+
+    public UserEntity toggleTrackingCandidate(Long id) {
+        UserEntity currentUser = this.getUserById(id);
+
+        userRepository.toggleTrackingCandidate(currentUser.getId());
+
+        return currentUser;
+    }
 }

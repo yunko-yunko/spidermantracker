@@ -54,6 +54,12 @@ public class UserController {
         return ResponseEntity.ok(updatedUser);
     }
 
+    @PostMapping("/toggle/{id}")
+    public ResponseEntity<?> toggleTrackingCandidate(@PathVariable Long id) {
+        UserEntity updatedUser = userService.toggleTrackingCandidate(id);
+        return ResponseEntity.ok(updatedUser);
+    }
+
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> delete(@PathVariable Long id) {
         UserEntity deletedUser = userService.deleteUser(id);
