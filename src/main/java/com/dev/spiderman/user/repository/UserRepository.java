@@ -6,6 +6,7 @@ import org.apache.catalina.User;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -28,6 +29,13 @@ public class UserRepository {
     public UserEntity create(UserEntity user) {
         UserJpaEntity savedUser = userJpaRepository.save(UserMapper.toJpaEntity(user));
         return UserMapper.toDomain(savedUser);
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserEntity> findAll() {
+        return UserMapper.toDomains(
+                userJpaRepository.findAll()
+        );
     }
 
     @Transactional(readOnly = true)
@@ -58,5 +66,30 @@ public class UserRepository {
                     UserMapper.updateJpaEntity(user, existingUser);
                     return UserMapper.toDomain(existingUser);
                 });
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserEntity> findTrackingCandidate() {
+        return userJpaRepository.findByTrackingCandidateTrueAndCurrentTrackerFalse()
+                .stream()
+                .map(UserMapper::toDomain)
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public Optional<UserEntity> findCurrentTracker() {
+        return userJpaRepository.findByCurrentTrackerTrue()
+                .map(UserMapper::toDomain);
+    }
+
+    @Transactional
+    public void changeCurrentTracker(Long userId) {
+        userJpaRepository.findByCurrentTrackerTrue()
+                .ifPresent(u -> u.setCurrentTracker(false));
+
+        UserJpaEntity nextTracker = userJpaRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
+
+        nextTracker.setCurrentTracker(true);
     }
 }

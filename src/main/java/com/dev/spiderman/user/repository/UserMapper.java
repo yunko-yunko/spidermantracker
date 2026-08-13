@@ -22,7 +22,9 @@ public final class UserMapper {
                 userJpaEntity.getId(),
                 userJpaEntity.getUsername(),
                 userJpaEntity.getPassword(),
-                userJpaEntity.getEmail()
+                userJpaEntity.getEmail(),
+                userJpaEntity.isTrackingCandidate(),
+                userJpaEntity.isCurrentTracker()
         );
     }
 
@@ -35,7 +37,9 @@ public final class UserMapper {
                 userEntity.getId(),
                 userEntity.getUsername(),
                 userEntity.getPassword(),
-                userEntity.getEmail()
+                userEntity.getEmail(),
+                userEntity.isTrackingCandidate(),
+                userEntity.isCurrentTracker()
         );
     }
 

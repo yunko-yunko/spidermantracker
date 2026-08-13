@@ -16,6 +16,8 @@ public class CreateUserDto {
                 .username(username)
                 .password(password)
                 .email(email)
+                .trackingCandidate(true)
+                .currentTracker(false)
                 .build();
     }
 

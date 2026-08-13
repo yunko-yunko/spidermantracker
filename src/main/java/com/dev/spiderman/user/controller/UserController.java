@@ -9,12 +9,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
 public class UserController {
 
     private final UserService userService;
+
+    @GetMapping()
+    public ResponseEntity<?> getAllUsers() {
+        List<UserEntity> users = userService.getAllUsers();
+        return ResponseEntity.ok(users);
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<UserEntity> getUser(@PathVariable Long id){
@@ -26,6 +34,12 @@ public class UserController {
     public ResponseEntity<UserEntity> getUserByUsername(@RequestParam String username){
         UserEntity user = userService.getUserByUsername(username);
         return ResponseEntity.ok(user);
+    }
+
+    @GetMapping("/todaytracker")
+    public ResponseEntity<?> getTodayTracker(){
+        UserEntity tracker = userService.selectTodayTracker();
+        return ResponseEntity.ok(tracker);
     }
 
     @PostMapping("/signup")

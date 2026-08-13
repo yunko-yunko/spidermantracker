@@ -24,4 +24,10 @@ public class UserJpaEntity {
 
     @Column(unique = true, nullable = false)
     private String email;
+
+    @Column(nullable = false)
+    private boolean trackingCandidate;
+
+    @Column(nullable = false)
+    private boolean currentTracker;
 }

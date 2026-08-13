@@ -1,9 +1,14 @@
 package com.dev.spiderman.user.service;
 
 import com.dev.spiderman.user.domain.UserEntity;
+import com.dev.spiderman.user.repository.UserJpaEntity;
+import com.dev.spiderman.user.repository.UserMapper;
 import com.dev.spiderman.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +24,10 @@ public class UserService {
         }
 
         return userRepository.create(user);
+    }
+
+    public List<UserEntity> getAllUsers() {
+        return userRepository.findAll();
     }
 
     public UserEntity getUserById(Long id) {
@@ -39,5 +48,23 @@ public class UserService {
     public UserEntity updateUser(UserEntity user, Long id) {
         return userRepository.updateById(id, user)
                 .orElseThrow(() -> new IllegalArgumentException("유저 없음"));
+    }
+
+    public UserEntity selectTodayTracker() {
+        List<UserEntity> userList = userRepository.findTrackingCandidate();
+
+        if(userList.isEmpty()){
+            throw new IllegalStateException("후보자 없음");
+        }
+
+        UserEntity nextTracker = userList.get(
+                ThreadLocalRandom.current().nextInt(
+                        userList.size()
+                )
+        );
+
+        userRepository.changeCurrentTracker(nextTracker.getId());
+
+        return nextTracker;
     }
 }
